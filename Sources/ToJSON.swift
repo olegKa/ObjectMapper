@@ -32,7 +32,7 @@ private func setValue(_ value: Any, map: Map) {
 	setValue(value, key: map.currentKey!, checkForNestedKeys: map.keyIsNested, delimiter: map.nestedKeyDelimiter, dictionary: &map.JSON)
 }
 
-private func setValue(_ value: Any, key: String, checkForNestedKeys: Bool, delimiter: String, dictionary: inout [String : Any]) {
+private func setValue(_ value: Any, key: String, checkForNestedKeys: Bool, delimiter: String, dictionary: inout [String : Any & Sendable]) {
 	if checkForNestedKeys {
 		let keyComponents = ArraySlice(key.components(separatedBy: delimiter).filter { !$0.isEmpty }.map { $0 })
 		setValue(value, forKeyPathComponents: keyComponents, dictionary: &dictionary)
@@ -41,7 +41,7 @@ private func setValue(_ value: Any, key: String, checkForNestedKeys: Bool, delim
 	}
 }
 
-private func setValue(_ value: Any, forKeyPathComponents components: ArraySlice<String>, dictionary: inout [String : Any]) {
+private func setValue(_ value: Any, forKeyPathComponents components: ArraySlice<String>, dictionary: inout [String : Any & Sendable]) {
 	guard let head = components.first else {
 		return
 	}
@@ -50,7 +50,7 @@ private func setValue(_ value: Any, forKeyPathComponents components: ArraySlice<
 	if components.count == 1 {
 		dictionary[headAsString] = value
 	} else {
-		var child = dictionary[headAsString] as? [String : Any] ?? [:]
+		var child = dictionary[headAsString] as? [String : Any & Sendable] ?? [:]
 		
 		let tail = components.dropFirst()
 		setValue(value, forKeyPathComponents: tail, dictionary: &child)

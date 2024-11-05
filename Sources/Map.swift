@@ -38,9 +38,9 @@ public protocol MapContext {
 public final class Map {
 	public let mappingType: MappingType
 	
-	public internal(set) var JSON: [String: Any] = [:]
+	public internal(set) var JSON: [String: Any & Sendable] = [:]
 	public internal(set) var isKeyPresent = false
-	public internal(set) var currentValue: Any?
+	public internal(set) var currentValue: Sendable?
 	public internal(set) var currentKey: String?
 	var keyIsNested = false
 	public internal(set) var nestedKeyDelimiter: String = "."
@@ -49,7 +49,7 @@ public final class Map {
 	
 	public let toObject: Bool // indicates whether the mapping is being applied to an existing object
 	
-	public init(mappingType: MappingType, JSON: [String: Any], toObject: Bool = false, context: MapContext? = nil, shouldIncludeNilValues: Bool = false) {
+	public init(mappingType: MappingType, JSON: [String: Any & Sendable], toObject: Bool = false, context: MapContext? = nil, shouldIncludeNilValues: Bool = false) {
 		
 		self.mappingType = mappingType
 		self.JSON = JSON

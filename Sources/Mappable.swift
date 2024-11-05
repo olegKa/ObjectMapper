@@ -58,7 +58,7 @@ public extension BaseMappable {
 	}
 	
 	/// Initializes object from a JSON Dictionary
-	init?(JSON: [String: Any], context: MapContext? = nil) {
+	init?(JSON: [String: Any & Sendable], context: MapContext? = nil) {
 		if let obj: Self = Mapper(context: context).map(JSON: JSON) {
 			self = obj
 		} else {
@@ -67,7 +67,7 @@ public extension BaseMappable {
 	}
 	
 	/// Returns the JSON Dictionary for the object
-	func toJSON() -> [String: Any] {
+    func toJSON() -> [String: Any & Sendable] {
 		return Mapper().toJSON(self)
 	}
 	
@@ -89,7 +89,7 @@ public extension Array where Element: BaseMappable {
 	}
 	
 	/// Initialize Array from a JSON Array
-	init(JSONArray: [[String: Any]], context: MapContext? = nil) {
+	init(JSONArray: [[String: Any & Sendable]], context: MapContext? = nil) {
 		let obj: [Element] = Mapper(context: context).mapArray(JSONArray: JSONArray)
 		self = obj
 	}
